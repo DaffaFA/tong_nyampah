@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "369061034691",
+    "firebase_url": "https://tong-nyampah.firebaseio.com",
+    "project_id": "tong-nyampah",
+    "storage_bucket": "tong-nyampah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369061034691:android:46a24821d18d2732998076",
+        "android_client_info": {
+          "package_name": "com.clrspmith.tongnyampah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "369061034691-rejo3r3ofn4pd6lpb6bqmbaqla5o0ql6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ8aRJfYUP_-zb42MqhGQMnwzQjIK13Fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "369061034691-rejo3r3ofn4pd6lpb6bqmbaqla5o0ql6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
