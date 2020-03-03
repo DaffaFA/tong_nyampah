@@ -1,55 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/widgets/feature_card.dart';
 import 'package:tongnyampah/widgets/gift_card.dart';
+import 'package:tongnyampah/widgets/item_container.dart';
+import 'package:tongnyampah/models/Gift.dart';
+import 'package:tongnyampah/widgets/navbar.dart';
 
 class HomeTest extends StatelessWidget {
+  // Future getProfileData() async {
+  //   return _user.
+  // }
+  final GlobalKey bottomNavigationKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<User>(context);
+
     return SingleChildScrollView(
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(38.0, 30.0, 38.0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Builder(
-                    builder: (context) => GestureDetector(
-                      child: Icon(
-                        Icons.menu,
-                        size: 35.0,
-                        color: Color(0xFF070707),
-                      ),
-                      onTap: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    ),
-                  ),
-                  // GestureDetector(
-                  //   child: Icon(
-                  //     Icons.menu,
-                  //     size: 35.0,
-                  //     color: Color(0xFF070707),
-                  //   ),
-                  // ),
-                  GestureDetector(
-                    child: Icon(
-                      Icons.notifications,
-                      size: 35.0,
-                      color: Color(0xFF070707),
-                    ),
-                    onTap: () {},
-                  )
-                ],
-              ),
-            ),
+            Navbar(),
             Container(
               padding: EdgeInsets.fromLTRB(38.0, 36.0, 38.0, 0),
               child: Text(
-                'Hi, Daffa',
+                'Hi,',
                 style: TextStyle(
                   fontSize: 42.0,
                   fontFamily: 'Aeonik',
@@ -135,29 +113,26 @@ class HomeTest extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
+                      onTap: () {},
                     ),
                   ),
                 ],
               ),
             ),
             Container(
-              padding: EdgeInsets.only(
-                top: 15.0,
-              ),
-              height: 175.0,
+              margin: EdgeInsets.only(top: 20.0),
+              height: 190.0,
               child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  GiftCard(
-                    margin: EdgeInsets.only(left: 38.0),
-                  ),
-                  GiftCard(
-                    margin: EdgeInsets.only(left: 16.0),
-                  ),
-                  GiftCard(
-                    margin: EdgeInsets.only(left: 16.0, right: 38.0)
-                  ),
-                ],
+                children: Gift.getAllGift()
+                    .map((gift) => GiftCard(
+                          margin: EdgeInsets.only(left: 20.0),
+                          image: gift.image,
+                          title: gift.name,
+                          point: gift.point,
+                        ))
+                    .toList(),
               ),
             ),
             Container(

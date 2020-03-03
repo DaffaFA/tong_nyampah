@@ -4,22 +4,34 @@ import 'package:provider/provider.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/account_menu.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
+import 'package:tongnyampah/screens/blog_menu.dart';
 import 'package:tongnyampah/screens/home/home_test.dart';
+import 'package:tongnyampah/screens/shop_menu.dart';
 import 'package:tongnyampah/services/auth.dart';
 
 class Wrapper extends StatefulWidget {
+  final int page;
+
+  Wrapper({this.page});
+
   @override
   _WrapperState createState() => _WrapperState();
 }
 
 class _WrapperState extends State<Wrapper> {
-  int _page = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
+  int _page = 0;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _listPage = <Widget>[HomeTest(), AccountMenu()];
     final user = Provider.of<User>(context);
+    final List<Widget> _listPage = <Widget>[
+      HomeTest(),
+      ShopMenu(),
+      AccountMenu(),
+      BlogMenu(),
+      AccountMenu(),
+    ];
     final _auth = AuthService();
 
     if (user == null) {
@@ -32,7 +44,7 @@ class _WrapperState extends State<Wrapper> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text('Daffa Dziban Fadia'),
-                accountEmail: Text('daffadf562@gmail.com'),
+                accountEmail: Text(user.email),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Text(
@@ -67,7 +79,7 @@ class _WrapperState extends State<Wrapper> {
         ),
         backgroundColor: Color(0xFFFFFFFF),
         bottomNavigationBar: CurvedNavigationBar(
-          key: _bottomNavigationKey,
+          key: this._bottomNavigationKey,
           index: 0,
           height: 50.0,
           items: <Widget>[

@@ -27,6 +27,9 @@ dependencies:
   provider: ^4.0.4
   curved_navigation_bar: ^0.3.2
   cloud_firestore: ^0.13.3
+  firebase_storage: ^3.1.1
+  carousel_slider: ^1.4.1
+  flare_splash_screen: ^3.0.1
 
 dev_dependencies:
   flutter_test:

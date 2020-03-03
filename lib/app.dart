@@ -60,10 +60,15 @@ RouteFactory _routes() {
         break;
       case HomeRoute:
         print(arguments);
-        screen = Home(name: arguments["name"], point: arguments["point"],);
+        screen = Home(
+          name: arguments["name"],
+          point: arguments["point"],
+        );
         break;
       case WrapperRoute:
-        screen = Wrapper();
+        screen = arguments["page"] != null
+            ? Wrapper(page: arguments["page"])
+            : Wrapper(page: 1);
         break;
       default:
         return null;
