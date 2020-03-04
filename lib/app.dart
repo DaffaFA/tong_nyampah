@@ -3,6 +3,7 @@ import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/authentication/create_account_screen.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/home/home.dart';
+import 'package:tongnyampah/screens/notification_list.dart';
 import 'package:tongnyampah/screens/wrapper.dart';
 import 'package:tongnyampah/services/auth.dart';
 import 'package:tongnyampah/styles.dart';
@@ -43,6 +44,7 @@ const SignInRoute = '/signin';
 const CreateAccountRoute = '/register';
 const HomeRoute = '/home';
 const WrapperRoute = '/wrap';
+const NotificationRoute = '/notification';
 
 RouteFactory _routes() {
   return (settings) {
@@ -69,6 +71,9 @@ RouteFactory _routes() {
         screen = arguments["page"] != null
             ? Wrapper(page: arguments["page"])
             : Wrapper(page: 1);
+        break;
+      case NotificationRoute:
+        screen = NotificationList();
         break;
       default:
         return null;

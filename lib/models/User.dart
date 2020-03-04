@@ -1,7 +1,9 @@
 class User {
   final String uid;
-  final dynamic data;
+// //  final String name;
+//   final String classroom;
+//   final int point;
   final String email;
 
-  User({this.uid, this.email, this.data});
+  User({this.uid, this.email,}); //this.classroom, this.name, this.point});
 }

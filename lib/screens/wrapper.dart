@@ -5,6 +5,7 @@ import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/account_menu.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/blog_menu.dart';
+import 'package:tongnyampah/screens/camera_menu.dart';
 import 'package:tongnyampah/screens/home/home_test.dart';
 import 'package:tongnyampah/screens/shop_menu.dart';
 import 'package:tongnyampah/services/auth.dart';
@@ -28,7 +29,7 @@ class _WrapperState extends State<Wrapper> {
     final List<Widget> _listPage = <Widget>[
       HomeTest(),
       ShopMenu(),
-      AccountMenu(),
+      CameraMenu(),
       BlogMenu(),
       AccountMenu(),
     ];
@@ -43,7 +44,7 @@ class _WrapperState extends State<Wrapper> {
           child: ListView(
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountName: Text('Daffa Dziban Fadia'),
+                accountName: Text('hi'),
                 accountEmail: Text(user.email),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,

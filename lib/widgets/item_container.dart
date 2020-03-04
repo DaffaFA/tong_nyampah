@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tongnyampah/widgets/gift_card.dart';
 
 class ItemContainer extends StatelessWidget {
   final EdgeInsetsGeometry margin;
@@ -20,11 +19,13 @@ class ItemContainer extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  'Baru ditambahkan',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.w700,
+                Container(
+                  child: Text(
+                    'Baru ditambahkan',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 Container(
@@ -42,6 +43,7 @@ class ItemContainer extends StatelessWidget {
             margin: EdgeInsets.only(top: 20.0),
             height: 175.0,
             child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               scrollDirection: Axis.horizontal,
               children: this.children,
             ),

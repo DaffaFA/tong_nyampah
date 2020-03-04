@@ -11,7 +11,6 @@ class AuthService {
         ? User(
             uid: user.uid,
             email: user.email,
-            data: DatabaseService(uid: user.uid).getProfileData()
           )
         : null;
   }

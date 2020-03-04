@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tongnyampah/app.dart';
 
 class Navbar extends StatelessWidget {
   final bool isSearch;
@@ -24,21 +25,17 @@ class Navbar extends StatelessWidget {
               },
             ),
           ),
-          // GestureDetector(
-          //   child: Icon(
-          //     Icons.menu,
-          //     size: 35.0,
-          //     color: Color(0xFF070707),
-          //   ),
-          // ),
-          GestureDetector(
-            child: Icon(
-              isSearch == null ? Icons.notifications : isSearch ? Icons.search : Icons.notifications,
-              size: 35.0,
-              color: Color(0xFF070707),
+          Builder(
+            builder: (context) => GestureDetector(
+              child: Icon(
+                isSearch == null
+                    ? Icons.notifications
+                    : isSearch ? Icons.search : Icons.notifications,
+                size: 35.0,
+                color: Color(0xFF070707),
+              ),
+              onTap: () => Navigator.pushNamed(context, NotificationRoute),
             ),
-            onTap: () {
-            },
           )
         ],
       ),
