@@ -39,7 +39,7 @@ class NewsCard extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.15,
             width: MediaQuery.of(context).size.height * 0.15,
             decoration: BoxDecoration(
-                color: Colors.white38,
+                color: Colors.grey,
                 image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(

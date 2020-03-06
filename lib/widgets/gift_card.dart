@@ -11,7 +11,7 @@ class GiftCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 152.0,
+      width: 145.0,
       margin: this.margin,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(12.0)),

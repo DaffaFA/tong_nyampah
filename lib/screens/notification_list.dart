@@ -33,6 +33,21 @@ class NotificationList extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(
+                        Icons.notifications_active,
+                      ),
+                      title: Text('Tong Nyampah'),
+                      subtitle: Text('Your point has increased +10'),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

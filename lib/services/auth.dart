@@ -1,4 +1,3 @@
-import 'package:tongnyampah/models/Profile.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tongnyampah/services/database.dart';
@@ -11,6 +10,7 @@ class AuthService {
         ? User(
             uid: user.uid,
             email: user.email,
+            data: DatabaseService(uid: user.uid).getProfileData(),
           )
         : null;
   }

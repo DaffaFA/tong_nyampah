@@ -6,7 +6,7 @@ import 'package:tongnyampah/screens/account_menu.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/blog_menu.dart';
 import 'package:tongnyampah/screens/camera_menu.dart';
-import 'package:tongnyampah/screens/home/home_test.dart';
+import 'package:tongnyampah/screens/home/home.dart';
 import 'package:tongnyampah/screens/shop_menu.dart';
 import 'package:tongnyampah/services/auth.dart';
 
@@ -22,34 +22,48 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   GlobalKey _bottomNavigationKey = GlobalKey();
   int _page = 0;
+  String name = '';
+  String initialName = '';
+
+  void getUserData(user) {
+    user.data.then((val) {
+      setState(() {
+        name = val["name"];
+        initialName = name.split(" ").map((nam) => nam.substring(0, 1)).join();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+
     final List<Widget> _listPage = <Widget>[
-      HomeTest(),
+      Home(),
       ShopMenu(),
       CameraMenu(),
       BlogMenu(),
       AccountMenu(),
     ];
     final _auth = AuthService();
-
     if (user == null) {
-      print(user);
       return SignInScreen();
     } else {
+      getUserData(user);
       return Scaffold(
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountName: Text('hi'),
+                accountName: Text(
+                  '$name',
+                  style: TextStyle(color: Colors.white),
+                ),
                 accountEmail: Text(user.email),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Text(
-                    'DDF',
+                    '$initialName',
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Aeonik',

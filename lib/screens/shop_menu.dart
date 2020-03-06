@@ -19,7 +19,7 @@ class ShopMenu extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: 20.0),
               child: CarouselSlider(
-                height: MediaQuery.of(context).size.height * 0.23,
+                height: MediaQuery.of(context).size.height * 0.28,
                 enableInfiniteScroll: false,
                 autoPlay: false,
                 items: SliderItem.fetchAllSliderItem().map((item) {

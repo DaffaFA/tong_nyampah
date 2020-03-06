@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tongnyampah/models/Profile.dart';
 
 class DatabaseService {
   final String uid;
   Firestore _firestore = Firestore.instance;
+  
+
 
   DatabaseService({this.uid});
-
   // Profile _convertToProfile(DocumentSnapshot documentSnapshot) {
   //   return documentSnapshot != null ? Profile(classroom: documentSnapshot.documentID)
   // }
@@ -22,7 +22,7 @@ class DatabaseService {
   Future createNewProfile(String name) async {
     try {
       await _firestore.collection('profiles').document(this.uid).setData({
-        "classroom": "XI RPL 1",
+        "classroom": null,
         "name": name,
         "point": 0,
         "role": "user"

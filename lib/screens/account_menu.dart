@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tongnyampah/widgets/setting_card.dart';
+import 'package:tongnyampah/models/User.dart';
 
-class AccountMenu extends StatelessWidget {
+class AccountMenu extends StatefulWidget {
+  @override
+  _AccountMenuState createState() => _AccountMenuState();
+}
+
+class _AccountMenuState extends State {
+  String name = '';
+  String initialName = '';
+
+  void getUserData(user) {
+    user.data.then((val) {
+      setState(() {
+        name = val["name"];
+        initialName = name.split(" ").map((nam) => nam.substring(0, 1)).join();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+
+    getUserData(user);
+
     return SingleChildScrollView(
       child: SafeArea(
         child: Column(
@@ -21,7 +44,7 @@ class AccountMenu extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: Color(0xFF070707),
                       child: Text(
-                        'DDF',
+                        '$initialName',
                         style:
                             TextStyle(fontSize: 18.0, color: Color(0xFFFFFFFF)),
                       ),
@@ -36,13 +59,13 @@ class AccountMenu extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(bottom: 6.0),
                           child: Text(
-                            'Daffa Dziban Fadia',
+                            '$name',
                             style: TextStyle(fontSize: 24.0),
                           ),
                         ),
                         Container(
                           child: Text(
-                            'daffadf562@gmail.com',
+                            '${user.email}',
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 16.0),
                           ),
@@ -64,8 +87,7 @@ class AccountMenu extends StatelessWidget {
                     title: 'Edit Account',
                     subtitle: 'Change your account profile',
                     onTap: () {
-                      Scaffold.of(context)
-                          .showSnackBar(SnackBar(content: Text('shiranani')));
+                      Navigator.pushNamed(context, '/account/edit');
                     },
                   )
                 ],

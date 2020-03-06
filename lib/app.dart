@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/authentication/create_account_screen.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
+import 'package:tongnyampah/screens/edit_profile.dart';
 import 'package:tongnyampah/screens/home/home.dart';
 import 'package:tongnyampah/screens/notification_list.dart';
+import 'package:tongnyampah/screens/report_screen.dart';
 import 'package:tongnyampah/screens/wrapper.dart';
 import 'package:tongnyampah/services/auth.dart';
 import 'package:tongnyampah/styles.dart';
@@ -45,6 +47,8 @@ const CreateAccountRoute = '/register';
 const HomeRoute = '/home';
 const WrapperRoute = '/wrap';
 const NotificationRoute = '/notification';
+const EditProfileRoute = '/account/edit';
+const ReportRoute = '/report';
 
 RouteFactory _routes() {
   return (settings) {
@@ -62,10 +66,7 @@ RouteFactory _routes() {
         break;
       case HomeRoute:
         print(arguments);
-        screen = Home(
-          name: arguments["name"],
-          point: arguments["point"],
-        );
+        screen = Home();
         break;
       case WrapperRoute:
         screen = arguments["page"] != null
@@ -74,6 +75,15 @@ RouteFactory _routes() {
         break;
       case NotificationRoute:
         screen = NotificationList();
+        break;
+      case EditProfileRoute:
+        screen = EditProfile();
+        break;
+      case ReportRoute:
+        screen = ReportScreen(
+          type: arguments["type"],
+          image: arguments["image"],
+        );
         break;
       default:
         return null;
