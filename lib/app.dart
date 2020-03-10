@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tongnyampah/models/User.dart';
+import 'package:tongnyampah/screens/admin/report_show.dart';
 import 'package:tongnyampah/screens/authentication/create_account_screen.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/edit_profile.dart';
@@ -49,6 +50,7 @@ const WrapperRoute = '/wrap';
 const NotificationRoute = '/notification';
 const EditProfileRoute = '/account/edit';
 const ReportRoute = '/report';
+const ReportShowRoute = '/report/show';
 
 RouteFactory _routes() {
   return (settings) {
@@ -83,6 +85,13 @@ RouteFactory _routes() {
         screen = ReportScreen(
           type: arguments["type"],
           image: arguments["image"],
+        );
+        break;
+      case ReportShowRoute:
+        screen = ReportShow(
+          documentId: arguments["documentId"],
+          uid: arguments["uid"],
+          type: arguments["type"],
         );
         break;
       default:

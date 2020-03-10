@@ -21,7 +21,10 @@ class _HomeState extends State<Home> {
   File _image;
 
   Future _openCamera(BuildContext context, String type) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+    );
     setState(() {
       _image = picture;
     });
