@@ -20,7 +20,7 @@ class _ReportScreen extends State<ReportScreen> {
   String _title = '';
   String _description = '';
   TextEditingController _descriptionController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,46 +28,47 @@ class _ReportScreen extends State<ReportScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        height: MediaQuery.of(context).size.height * 0.185,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 7.0),
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              height: MediaQuery.of(context).size.width * 0.12,
-              child: InkWell(
-                child: Container(
-                  color: Colors.black,
-                  child: Center(
-                    child: Text(
-                      'CONFIRM',
-                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+      bottomNavigationBar: widget.type == 'capture'
+          ? Container(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              height: MediaQuery.of(context).size.height * 0.115,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 7.0),
+                    padding: EdgeInsets.symmetric(horizontal: 12.0),
+                    height: MediaQuery.of(context).size.width * 0.12,
+                    child: InkWell(
+                      onTap: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) => UploaderDialog(
+                          uid: _user.uid,
+                          // title: _title,
+                          // description: _description,
+                          type: widget.type,
+                          image: widget.image,
+                        ),
+                      ),
+                      child: Container(
+                        color: Colors.black,
+                        child: Center(
+                          child: Text(
+                            'CONFIRM',
+                            style:
+                                TextStyle(fontSize: 18.0, color: Colors.white),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
+            )
+          : Container(
+              width: 0.0,
+              height: 0.0,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              height: MediaQuery.of(context).size.width * 0.12,
-              child: InkWell(
-                child: Container(
-                  color: Colors.black54,
-                  child: Center(
-                    child: Text(
-                      'DENY',
-                      style: TextStyle(fontSize: 18.0, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(
           title: Text(
               '${widget.type[0].toUpperCase()}${widget.type.substring(1)}')),
@@ -88,6 +89,7 @@ class _ReportScreen extends State<ReportScreen> {
               ),
               !(widget.type == 'capture')
                   ? Form(
+                      key: _formKey,
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
                         child: Column(
@@ -101,6 +103,12 @@ class _ReportScreen extends State<ReportScreen> {
                                   setState(() {
                                     _title = value;
                                   });
+                                },
+                                validator: (value) {
+                                  if ( value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
                                 },
                                 controller: _titleController,
                                 decoration: InputDecoration(
@@ -123,6 +131,12 @@ class _ReportScreen extends State<ReportScreen> {
                                     _description = value;
                                   });
                                 },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
                                 controller: _descriptionController,
                                 keyboardType: TextInputType.multiline,
                                 maxLines: 3,
@@ -138,17 +152,22 @@ class _ReportScreen extends State<ReportScreen> {
                               ),
                             ),
                             InkWell(
-                              onTap: () => showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
+                              onTap: () {
+                                if ( _formKey.currentState.validate() ) {
+                                return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
                                     UploaderDialog(
-                                  uid: _user.uid,
-                                  title: _title,
-                                  description: _description,
-                                  type: widget.type,
-                                  image: widget.image,
-                                ),
-                              ),
+                                      uid: _user.uid,
+                                      title: _title,
+                                      description: _description,
+                                      type: widget.type,
+                                      image: widget.image,
+                                    ),
+                                  );
+                                }
+                                return null;
+                              },
                               child: Container(
                                 margin: EdgeInsets.only(top: 18.0),
                                 height: 50.0,

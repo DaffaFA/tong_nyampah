@@ -4,19 +4,17 @@ class DatabaseService {
   final String uid;
   Firestore _firestore = Firestore.instance;
 
-  Future<void> createNewReport({
-    String image,
-    String type,
-    String title,
-    String description,
-  }) async {
+  Future<void> createNewReport(
+      {String image, String type, String title, String description}) async {
     try {
       await _firestore.collection('reports').document().setData({
         "image": image,
         "user_uid": this.uid,
         "type": type,
-        "title": title != null ? title : '',
-        "description": description != null ? description : '',
+        "title": title != null ? title : 'Capture',
+        "description": description != null
+            ? description
+            : 'No description, it\'s was capture type',
         "status": "waiting",
       });
     } catch (e) {
@@ -26,7 +24,50 @@ class DatabaseService {
 
   DatabaseService({this.uid});
 
-  Stream<QuerySnapshot> getAllReport()  {
+  Future createNewGifts(
+      {String image, String title, String description, int point}) async {
+    return await _firestore.collection('gifts').document().setData({
+      "image": image,
+      "title": title,
+      "description": description,
+      "point": point
+    });
+  }
+
+  Stream<DocumentSnapshot> getReportByDocId(docId) {
+    return _firestore.collection('reports').document(docId).snapshots();
+  }
+
+  Stream<QuerySnapshot> getAllGift() {
+    return _firestore.collection('gifts').snapshots();
+  }
+
+  Future<void> setStatusReport(docId, status, type, uid) async {
+    final int point = type == 'capture' ? 10 : type == 'recycle' ? 30 : 15;
+    final _user = _firestore.collection('profiles').document(uid);
+    int pointBefore;
+
+    await _user.get().then((val) {
+      pointBefore = val["point"];
+    });
+
+    await _firestore.collection('reports').document(docId).updateData({
+      "status": status,
+    });
+
+    if (status == 'confirmed') {
+      await _firestore.collection('point_history').document().setData({
+        "point_before": pointBefore,
+        "point_after": pointBefore + point,
+      });
+
+      await _user.updateData({
+        "point": pointBefore + point,
+      });
+    }
+  }
+
+  Stream<QuerySnapshot> getAllReport() {
     return _firestore.collection('reports').snapshots();
   }
 

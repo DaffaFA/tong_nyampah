@@ -5,21 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:tongnyampah/services/database.dart';
 import 'package:uuid/uuid.dart';
 
-class UploaderDialog extends StatefulWidget {
+class GiftUploader extends StatefulWidget {
   final String title, description;
-  @required
-  final String uid, type;
+  final int point;
   @required
   final File image;
 
-  UploaderDialog(
-      {this.title, this.description, this.image, this.type, this.uid});
+  GiftUploader({this.title, this.description, this.image, this.point});
 
   @override
-  _UploaderDialog createState() => _UploaderDialog();
+  _GiftUploader createState() => _GiftUploader();
 }
 
-class _UploaderDialog extends State<UploaderDialog> {
+class _GiftUploader extends State<GiftUploader> {
   final FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://tong-nyampah.appspot.com/');
 
@@ -28,8 +26,7 @@ class _UploaderDialog extends State<UploaderDialog> {
   final String uuid = Uuid().v1();
 
   void _startUpload() {
-    String filePath =
-        '${widget.type[0].toUpperCase()}${widget.type.substring(1)}/${widget.type[0].toUpperCase()}${widget.type.substring(1)}-$uuid';
+    String filePath = 'Gifts/$uuid';
 
     setState(() {
       _uploadTask = _storage.ref().child(filePath).putFile(widget.image);
@@ -37,16 +34,13 @@ class _UploaderDialog extends State<UploaderDialog> {
   }
 
   Future<void> _sendReport() async {
-    dynamic downloadUrl = await _storage
-        .ref()
-        .child(
-            '${widget.type[0].toUpperCase()}${widget.type.substring(1)}/${widget.type[0].toUpperCase()}${widget.type.substring(1)}-$uuid')
-        .getDownloadURL();
+    dynamic downloadUrl =
+        await _storage.ref().child('Gifts/$uuid').getDownloadURL();
 
-    await DatabaseService(uid: widget.uid).createNewReport(
+    await DatabaseService().createNewGifts(
       title: widget.title,
       image: downloadUrl,
-      type: widget.type,
+      point: widget.point,
       description: widget.description,
     );
   }
@@ -139,7 +133,7 @@ class _UploaderDialog extends State<UploaderDialog> {
                 Container(
                   margin: EdgeInsets.only(bottom: 18.0),
                   child: Text(
-                    'Please wait while we uploading your report',
+                    'Please wait while we uploading your post',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16.0,

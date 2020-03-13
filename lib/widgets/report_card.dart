@@ -37,7 +37,7 @@ class ReportCard extends StatelessWidget {
                     ),
                     Container(
                       child: Text(
-                        '${description.substring(0, description.length > 12 ? 13 : description.length)}...',
+                        '${description.substring(0, description.length > 30 ? 31 : description.length)}...',
                         style: TextStyle(fontWeight: FontWeight.w400),
                       ),
                     )

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/admin/overall.dart';
@@ -17,6 +20,7 @@ class _DashboardState extends State<Dashboard> {
   String role = '';
   String initialName = '';
   bool isLoading;
+  File _image;
   final _auth = AuthService();
 
   void getUserData(user) {
@@ -35,21 +39,66 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  Choice _selectedChoice = Choice.getAllChoice()[0];
   int _page = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
   List<Widget> _listPage = [
     Overall(),
     ReportList(),
-    ReportList(),
   ];
 
-  Choice _selectedChoice = Choice.getAllChoice()[0];
+  Future _openCamera(BuildContext context, type) async {
+    ImageSource tip = type == 'camera'
+        ? ImageSource.camera
+        : type == 'gallery' ? ImageSource.gallery : null;
+
+    var picture = await ImagePicker.pickImage(
+      source: tip,
+      imageQuality: 50,
+    );
+    setState(() {
+      _image = picture;
+    });
+
+    if (_image != null) {
+      Navigator.pushNamed(context, '/gift/add', arguments: {
+        "image": _image,
+      });
+    }
+  }
+
+  Future<void> _optionsDialogBox() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: new Text('Take a picture'),
+                    onTap: () => _openCamera(context, 'camera'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: new Text('Select from gallery'),
+                    onTap: () => _openCamera(context, 'gallery'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
   void _select(Choice choice) {
     // Causes the app to rebuild with the new _selectedChoice.
     setState(() {
       _selectedChoice = choice;
     });
+    print(_selectedChoice.title);
   }
 
   @override
@@ -62,11 +111,19 @@ class _DashboardState extends State<Dashboard> {
     screen = isLoading == null || isLoading == true
         ? LoadingScreen()
         : Scaffold(
+            floatingActionButton: _page == 0
+                ? FloatingActionButton(
+                    child: Icon(Icons.add),
+                    backgroundColor: Colors.black,
+                    onPressed: () => _optionsDialogBox(),
+                  )
+                : null,
             backgroundColor: Colors.white,
             appBar: AppBar(
               actions: _page == 1
                   ? <Widget>[
                       PopupMenuButton(
+                        onSelected: (val) => _select(val),
                         itemBuilder: (BuildContext context) {
                           return Choice.getAllChoice().map((Choice choice) {
                             return PopupMenuItem<Choice>(
@@ -135,21 +192,6 @@ class _DashboardState extends State<Dashboard> {
                   size: 30,
                   color: Colors.white,
                 ),
-                Icon(
-                  Icons.compare_arrows,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                Icon(
-                  Icons.call_split,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                Icon(
-                  Icons.perm_identity,
-                  size: 30,
-                  color: Colors.white,
-                ),
               ],
               color: Colors.black,
               buttonBackgroundColor: Colors.black,
@@ -176,12 +218,9 @@ class Choice {
 
   static List<Choice> getAllChoice() {
     return <Choice>[
-      Choice(title: 'Car', icon: Icons.directions_car),
-      Choice(title: 'Bicycle', icon: Icons.directions_bike),
-      Choice(title: 'Boat', icon: Icons.directions_boat),
-      Choice(title: 'Bus', icon: Icons.directions_bus),
-      Choice(title: 'Train', icon: Icons.directions_railway),
-      Choice(title: 'Walk', icon: Icons.directions_walk),
+      Choice(title: 'Waiting', icon: Icons.directions_car),
+      Choice(title: 'Confirmed', icon: Icons.directions_bike),
+      Choice(title: 'Denied', icon: Icons.directions_boat),
     ];
   }
 }

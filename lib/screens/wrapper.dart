@@ -6,7 +6,7 @@ import 'package:tongnyampah/screens/account_menu.dart';
 import 'package:tongnyampah/screens/admin/dashboard.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/blog_menu.dart';
-import 'package:tongnyampah/screens/camera_menu.dart';
+// import 'package:tongnyampah/screens/camera_menu.dart';
 import 'package:tongnyampah/screens/home/home.dart';
 import 'package:tongnyampah/screens/loading_screen.dart';
 import 'package:tongnyampah/screens/shop_menu.dart';
@@ -52,7 +52,7 @@ class _WrapperState extends State<Wrapper> {
     final List<Widget> _listPage = <Widget>[
       Home(),
       ShopMenu(),
-      CameraMenu(),
+      // CameraMenu(),
       BlogMenu(),
       AccountMenu(),
     ];
@@ -101,7 +101,7 @@ class _WrapperState extends State<Wrapper> {
                   leading: Icon(
                     Icons.exit_to_app,
                     size: 30.0,
-                    color: Color(0xFF070707),
+                    color: Color(0xFF070707)
                   ),
                   onTap: () async {
                     await _auth.signOut();
@@ -123,11 +123,6 @@ class _WrapperState extends State<Wrapper> {
               ),
               Icon(
                 Icons.shopping_cart,
-                size: 30,
-                color: Colors.white,
-              ),
-              Icon(
-                Icons.camera,
                 size: 30,
                 color: Colors.white,
               ),

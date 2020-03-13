@@ -4,6 +4,10 @@ import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/report_card.dart';
 
 class ReportList extends StatefulWidget {
+  // final String choice;
+
+  // ReportList(this.choice);
+
   @override
   _ReportListState createState() => _ReportListState();
 }
@@ -54,11 +58,18 @@ class _ReportListState extends State<ReportList> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: snapshot.data.documents
+                              .where((doc) => doc["status"] == "waiting")
                               .map((val) => ReportCard(
                                     onTap: () {
-                                      // Navigator.pushNamed(context, routeName, arguments: {
-                                        
-                                      // });
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/report/show',
+                                        arguments: {
+                                          "documentId": val.documentID,
+                                          "uid": val["user_uid"],
+                                          "type": val["type"],
+                                        },
+                                      );
                                     },
                                     description: val["description"],
                                     title: val["title"],

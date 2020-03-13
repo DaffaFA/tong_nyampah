@@ -107,14 +107,13 @@ class _HomeState extends State<Home> {
                     icon: Icons.restore,
                     title: 'Recycle',
                     margin: EdgeInsets.only(left: 16.0),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/report');
-                    },
+                    onTap: () => _openCamera(context, 'recycle'),
                   ),
                   FeatureCard(
                     icon: Icons.report,
                     title: 'Report',
                     margin: EdgeInsets.only(left: 16.0, right: 38.0),
+                    onTap: () => _openCamera(context, 'report'),
                   )
                 ],
               ),
@@ -170,6 +169,15 @@ class _HomeState extends State<Home> {
                           image: gift.image,
                           title: gift.name,
                           point: gift.point,
+                          onTap: () {
+                            Navigator.pushNamed(context, '/gift/description',
+                                arguments: {
+                                  "image": gift.image,
+                                  "title": gift.name,
+                                  "point": gift.point,
+                                  "description": gift.description
+                                });
+                          },
                         ))
                     .toList(),
               ),

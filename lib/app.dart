@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tongnyampah/models/User.dart';
+import 'package:tongnyampah/screens/admin/add_gifts.dart';
+import 'package:tongnyampah/screens/admin/fullscreen_image.dart';
 import 'package:tongnyampah/screens/admin/report_show.dart';
 import 'package:tongnyampah/screens/authentication/create_account_screen.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/edit_profile.dart';
+import 'package:tongnyampah/screens/gift_description.dart';
 import 'package:tongnyampah/screens/home/home.dart';
 import 'package:tongnyampah/screens/notification_list.dart';
 import 'package:tongnyampah/screens/report_screen.dart';
@@ -51,6 +54,9 @@ const NotificationRoute = '/notification';
 const EditProfileRoute = '/account/edit';
 const ReportRoute = '/report';
 const ReportShowRoute = '/report/show';
+const GiftDescriptionRoute = '/gift/description';
+const FullScreenImageRoute = '/report/show/image';
+const GiftAddRoute = '/gift/add';
 
 RouteFactory _routes() {
   return (settings) {
@@ -93,6 +99,20 @@ RouteFactory _routes() {
           uid: arguments["uid"],
           type: arguments["type"],
         );
+        break;
+      case GiftDescriptionRoute:
+        screen = GiftDescription(
+          image: arguments["image"],
+          description: arguments["description"],
+          title: arguments["title"],
+          point: arguments["point"],
+        );
+        break;
+      case FullScreenImageRoute:
+        screen = FullScreenImage(arguments["image"]);
+        break;
+      case GiftAddRoute:
+        screen = AddGifts(arguments["image"]);
         break;
       default:
         return null;
