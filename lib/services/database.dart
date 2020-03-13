@@ -24,6 +24,14 @@ class DatabaseService {
 
   DatabaseService({this.uid});
 
+  Future createReportClaim({String docId, String uid}) {
+    return _firestore.collection('gifts_redeem').document().setData({
+      "gifts_uid": docId,
+      "user_uid": uid,
+      "status": 'waiting',
+    });
+  }
+
   Future createNewGifts(
       {String image, String title, String description, int point}) async {
     return await _firestore.collection('gifts').document().setData({
@@ -34,12 +42,25 @@ class DatabaseService {
     });
   }
 
+  Future createNewBlog({String image, String title, String description}) async {
+    return await _firestore.collection('blog').document().setData({
+      "image": image,
+      "title": title,
+      "description": description,
+      "created_at": Timestamp.now()
+    });
+  }
+
   Stream<DocumentSnapshot> getReportByDocId(docId) {
     return _firestore.collection('reports').document(docId).snapshots();
   }
 
   Stream<QuerySnapshot> getAllGift() {
     return _firestore.collection('gifts').snapshots();
+  }
+
+  Stream<QuerySnapshot> getAllPost() {
+    return _firestore.collection('blog').snapshots();
   }
 
   Future<void> setStatusReport(docId, status, type, uid) async {

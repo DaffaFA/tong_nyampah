@@ -5,19 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:tongnyampah/services/database.dart';
 import 'package:uuid/uuid.dart';
 
-class GiftUploader extends StatefulWidget {
+class BlogUploader extends StatefulWidget {
   final String title, description;
-  final int point;
   @required
   final File image;
 
-  GiftUploader({this.title, this.description, this.image, this.point});
+  BlogUploader({this.title, this.description, this.image});
 
   @override
-  _GiftUploader createState() => _GiftUploader();
+  _BlogUploader createState() => _BlogUploader();
 }
 
-class _GiftUploader extends State<GiftUploader> {
+class _BlogUploader extends State<BlogUploader> {
   final FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://tong-nyampah.appspot.com/');
 
@@ -26,7 +25,7 @@ class _GiftUploader extends State<GiftUploader> {
   final String uuid = Uuid().v1();
 
   void _startUpload() {
-    String filePath = 'Gifts/$uuid';
+    String filePath = 'Blogs/$uuid';
 
     setState(() {
       _uploadTask = _storage.ref().child(filePath).putFile(widget.image);
@@ -35,12 +34,11 @@ class _GiftUploader extends State<GiftUploader> {
 
   Future<void> _sendReport() async {
     dynamic downloadUrl =
-        await _storage.ref().child('Gifts/$uuid').getDownloadURL();
+        await _storage.ref().child('Blogs/$uuid').getDownloadURL();
 
-    await DatabaseService().createNewGifts(
+    await DatabaseService().createNewBlog(
       title: widget.title,
       image: downloadUrl,
-      point: widget.point,
       description: widget.description,
     );
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/admin/add_gifts.dart';
+import 'package:tongnyampah/screens/admin/blog_add.dart';
 import 'package:tongnyampah/screens/admin/fullscreen_image.dart';
 import 'package:tongnyampah/screens/admin/report_show.dart';
 import 'package:tongnyampah/screens/authentication/create_account_screen.dart';
 import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
+import 'package:tongnyampah/screens/blog_show.dart';
 import 'package:tongnyampah/screens/edit_profile.dart';
 import 'package:tongnyampah/screens/gift_description.dart';
 import 'package:tongnyampah/screens/home/home.dart';
@@ -57,6 +59,8 @@ const ReportShowRoute = '/report/show';
 const GiftDescriptionRoute = '/gift/description';
 const FullScreenImageRoute = '/report/show/image';
 const GiftAddRoute = '/gift/add';
+const BlogAddRoute = '/blog/add';
+const BlogShowRoute = '/blog/show';
 
 RouteFactory _routes() {
   return (settings) {
@@ -106,6 +110,7 @@ RouteFactory _routes() {
           description: arguments["description"],
           title: arguments["title"],
           point: arguments["point"],
+          documentId: arguments["documentId"],
         );
         break;
       case FullScreenImageRoute:
@@ -113,6 +118,17 @@ RouteFactory _routes() {
         break;
       case GiftAddRoute:
         screen = AddGifts(arguments["image"]);
+        break;
+      case BlogAddRoute:
+        screen = BlogAdd(arguments["image"]);
+        break;
+      case BlogShowRoute:
+        screen = BlogShow(
+          title: arguments["title"],
+          image: arguments["image"],
+          description: arguments["description"],
+          timestamp: arguments["timestamp"],
+        );
         break;
       default:
         return null;

@@ -5,6 +5,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tongnyampah/models/User.dart';
+import 'package:tongnyampah/screens/admin/blog_list.dart';
 import 'package:tongnyampah/screens/admin/overall.dart';
 import 'package:tongnyampah/screens/admin/report_list.dart';
 import 'package:tongnyampah/screens/loading_screen.dart';
@@ -45,9 +46,10 @@ class _DashboardState extends State<Dashboard> {
   List<Widget> _listPage = [
     Overall(),
     ReportList(),
+    BlogList(),
   ];
 
-  Future _openCamera(BuildContext context, type) async {
+  Future _openCamera(BuildContext context, type, page) async {
     ImageSource tip = type == 'camera'
         ? ImageSource.camera
         : type == 'gallery' ? ImageSource.gallery : null;
@@ -61,13 +63,19 @@ class _DashboardState extends State<Dashboard> {
     });
 
     if (_image != null) {
-      Navigator.pushNamed(context, '/gift/add', arguments: {
-        "image": _image,
-      });
+      if (page == 'gift') {
+        Navigator.pushNamed(context, '/gift/add', arguments: {
+          "image": _image,
+        });
+      } else if (page == 'blog') {
+        Navigator.pushNamed(context, '/blog/add', arguments: {
+          "image": _image,
+        });
+      }
     }
   }
 
-  Future<void> _optionsDialogBox() {
+  Future<void> _optionsDialogBox(page) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -77,14 +85,14 @@ class _DashboardState extends State<Dashboard> {
                 children: <Widget>[
                   GestureDetector(
                     child: new Text('Take a picture'),
-                    onTap: () => _openCamera(context, 'camera'),
+                    onTap: () => _openCamera(context, 'camera', page),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                   ),
                   GestureDetector(
                     child: new Text('Select from gallery'),
-                    onTap: () => _openCamera(context, 'gallery'),
+                    onTap: () => _openCamera(context, 'gallery', page),
                   ),
                 ],
               ),
@@ -111,11 +119,13 @@ class _DashboardState extends State<Dashboard> {
     screen = isLoading == null || isLoading == true
         ? LoadingScreen()
         : Scaffold(
-            floatingActionButton: _page == 0
+            floatingActionButton: _page == 0 || _page == 2
                 ? FloatingActionButton(
                     child: Icon(Icons.add),
                     backgroundColor: Colors.black,
-                    onPressed: () => _optionsDialogBox(),
+                    onPressed: () => _page == 0
+                        ? _optionsDialogBox('gift')
+                        : _optionsDialogBox('blog'),
                   )
                 : null,
             backgroundColor: Colors.white,
@@ -183,12 +193,17 @@ class _DashboardState extends State<Dashboard> {
               height: 50.0,
               items: <Widget>[
                 Icon(
-                  Icons.dashboard,
+                  Icons.card_giftcard,
                   size: 30,
                   color: Colors.white,
                 ),
                 Icon(
                   Icons.report,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                Icon(
+                  Icons.book,
                   size: 30,
                   color: Colors.white,
                 ),

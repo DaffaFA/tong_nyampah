@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tongnyampah/models/User.dart';
+import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/feature_card.dart';
 import 'package:tongnyampah/widgets/gift_card.dart';
-import 'package:tongnyampah/models/Gift.dart';
 import 'package:tongnyampah/widgets/navbar.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -160,27 +161,54 @@ class _HomeState extends State<Home> {
             Container(
               margin: EdgeInsets.only(top: 20.0),
               height: 190.0,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                scrollDirection: Axis.horizontal,
-                children: Gift.getAllGift()
-                    .map((gift) => GiftCard(
-                          margin: EdgeInsets.only(left: 20.0),
-                          image: gift.image,
-                          title: gift.name,
-                          point: gift.point,
-                          onTap: () {
-                            Navigator.pushNamed(context, '/gift/description',
-                                arguments: {
-                                  "image": gift.image,
-                                  "title": gift.name,
-                                  "point": gift.point,
-                                  "description": gift.description
-                                });
-                          },
-                        ))
-                    .toList(),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: DatabaseService().getAllGift(),
+                builder: (context, snapshot) {
+                  return ListView(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    scrollDirection: Axis.horizontal,
+                    children: snapshot.data.documents
+                        .map((gift) => GiftCard(
+                              onTap: () => Navigator.pushNamed(
+                                  context, '/gift/description',
+                                  arguments: {
+                                    "image": gift.data["image"],
+                                    "title": gift.data["title"],
+                                    "point": gift.data["point"],
+                                    "description": gift.data["description"],
+                                    "documentId": gift.documentID,
+                                  }),
+                              margin: EdgeInsets.only(left: 20.0),
+                              image: gift.data["image"],
+                              title: gift.data["title"],
+                              point: gift.data["point"],
+                            ))
+                        .toList(),
+                  );
+                },
               ),
+              // child: ListView(
+              //   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              //   scrollDirection: Axis.horizontal,
+              //   children: Gift.getAllGift()
+              //       .map((gift) => GiftCard(
+              //             margin: EdgeInsets.only(left: 20.0),
+              //             image: gift.image,
+              //             title: gift.name,
+              //             point: gift.point,
+              //             onTap: () {
+              //               Navigator.pushNamed(context, '/gift/description',
+              //                   arguments: {
+              //                     "image": gift.image,
+              //                     "title": gift.name,
+              //                     "point": gift.point,
+              //                     "description": gift.description
+              //                   });
+              //             },
+              //           ))
+              //       .toList(),
+              // ),
             ),
             Container(
               margin: EdgeInsets.only(bottom: 38.0),

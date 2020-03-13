@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ItemContainer extends StatelessWidget {
   final EdgeInsetsGeometry margin;
-  final List<Widget> children;
+  final Widget child;
 
-  ItemContainer({this.margin, this.children});
+  ItemContainer({this.margin, this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +42,7 @@ class ItemContainer extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 20.0),
             height: 175.0,
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              scrollDirection: Axis.horizontal,
-              children: this.children,
-            ),
+            child: this.child
           )
         ],
       ),

@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tongnyampah/models/Gift.dart';
 import 'package:tongnyampah/models/Slider.dart';
+import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/gift_card.dart';
 import 'package:tongnyampah/widgets/item_container.dart';
 import 'package:tongnyampah/widgets/navbar.dart';
@@ -15,7 +16,9 @@ class ShopMenu extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Navbar(),
+            Navbar(
+              condition: 'shop',
+            ),
             Container(
               margin: EdgeInsets.only(top: 20.0),
               child: CarouselSlider(
@@ -94,27 +97,65 @@ class ShopMenu extends StatelessWidget {
             Container(
               child: ItemContainer(
                 margin: EdgeInsets.only(top: 40.0, bottom: 20.0),
-                children: Gift.getAllGift()
-                    .map((gift) => GiftCard(
-                          margin: EdgeInsets.only(left: 20.0),
-                          image: gift.image,
-                          title: gift.name,
-                          point: gift.point,
-                        ))
-                    .toList(),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: DatabaseService().getAllGift(),
+                  builder: (context, snapshot) {
+                    return ListView(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      scrollDirection: Axis.horizontal,
+                      children: snapshot.data.documents
+                          .map((gift) => GiftCard(
+                                onTap: () => Navigator.pushNamed(
+                                    context, '/gift/description',
+                                    arguments: {
+                                      "image": gift.data["image"],
+                                      "title": gift.data["title"],
+                                      "point": gift.data["point"],
+                                      "description": gift.data["description"],
+                                      "documentId": gift.documentID,
+                                    }),
+                                margin: EdgeInsets.only(left: 20.0),
+                                image: gift.data["image"],
+                                title: gift.data["title"],
+                                point: gift.data["point"],
+                              ))
+                          .toList(),
+                    );
+                  },
+                ),
               ),
             ),
             Container(
               child: ItemContainer(
                 margin: EdgeInsets.symmetric(vertical: 20.0),
-                children: Gift.getAllGift()
-                    .map((gift) => GiftCard(
-                          margin: EdgeInsets.only(left: 20.0),
-                          image: gift.image,
-                          title: gift.name,
-                          point: gift.point,
-                        ))
-                    .toList(),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: DatabaseService().getAllGift(),
+                  builder: (context, snapshot) {
+                    return ListView(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      scrollDirection: Axis.horizontal,
+                      children: snapshot.data.documents
+                          .map((gift) => GiftCard(
+                                onTap: () => Navigator.pushNamed(
+                                    context, '/gift/description',
+                                    arguments: {
+                                      "image": gift.data["image"],
+                                      "title": gift.data["title"],
+                                      "point": gift.data["point"],
+                                      "description": gift.data["description"],
+                                      "documentId": gift.documentID,
+                                    }),
+                                margin: EdgeInsets.only(left: 20.0),
+                                image: gift.data["image"],
+                                title: gift.data["title"],
+                                point: gift.data["point"],
+                              ))
+                          .toList(),
+                    );
+                  },
+                ),
               ),
             ),
           ],

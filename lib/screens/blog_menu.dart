@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/navbar.dart';
 import 'package:tongnyampah/widgets/news_card.dart';
 
@@ -16,7 +18,7 @@ class _BlogMenuState extends State<BlogMenu> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Navbar(isSearch: true),
+            Navbar(condition: 'search'),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
               child: Column(
@@ -33,16 +35,32 @@ class _BlogMenuState extends State<BlogMenu> {
                   Divider(
                     thickness: 1.3,
                   ),
-                  Column(
-                    children: <Widget>[
-                      NewsCard(),
-                      NewsCard(),
-                      NewsCard(),
-                      NewsCard(),
-                      NewsCard(),
-                      NewsCard(),
-                    ],
-                  )
+                  StreamBuilder<QuerySnapshot>(
+                    stream: DatabaseService().getAllPost(),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: snapshot.data.documents
+                            .map((val) => NewsCard(
+                                  onTap: () => Navigator.pushNamed(
+                                      context, '/blog/show',
+                                      arguments: {
+                                        "image": val.data["image"],
+                                        "title": val.data["title"],
+                                        "description": val.data["description"],
+                                        "timestamp": val.data["created_at"]
+                                            .toDate()
+                                            .toString()
+                                      }),
+                                  image: val.data["image"],
+                                  title: val.data["title"],
+                                  timestamp: val.data["created_at"]
+                                      .toDate()
+                                      .toString(),
+                                ))
+                            .toList(),
+                      );
+                    },
+                  ),
                 ],
               ),
             )

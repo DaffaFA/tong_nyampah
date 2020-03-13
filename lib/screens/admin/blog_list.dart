@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/report_card.dart';
 
-class Overall extends StatefulWidget {
+class BlogList extends StatefulWidget {
   @override
-  _OverallState createState() => _OverallState();
+  _BlogListState createState() => _BlogListState();
 }
 
-class _OverallState extends State<Overall> {
+class _BlogListState extends State<BlogList> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -28,7 +28,7 @@ class _OverallState extends State<Overall> {
                   Container(
                     padding: EdgeInsets.only(bottom: 5.0),
                     child: Text(
-                      'List of gifts',
+                      'List of post',
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -42,7 +42,7 @@ class _OverallState extends State<Overall> {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: DatabaseService().getAllGift(),
+              stream: DatabaseService().getAllPost(),
               builder: (context, snapshot) {
                 return snapshot.hasData
                     ? Container(

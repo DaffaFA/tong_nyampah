@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tongnyampah/models/User.dart';
+import 'package:tongnyampah/services/database.dart';
 
 class GiftDescription extends StatelessWidget {
   final String image;
   final String title;
   final int point;
   final String description;
+  final String documentId;
 
-  GiftDescription({this.image, this.description, this.title, this.point});
+  GiftDescription(
+      {this.image, this.description, this.title, this.point, this.documentId});
+
+  void redeemGift(context, giftId, userUid) {
+    DatabaseService().createReportClaim(
+      docId: giftId,
+      uid: userUid,
+    );
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<User>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -85,9 +100,14 @@ class GiftDescription extends StatelessWidget {
                 color: Colors.black,
                 margin: EdgeInsets.symmetric(horizontal: 38.0),
                 child: InkWell(
+                  onTap: () => redeemGift(context, documentId, _user.uid),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10.0),
-                    child: Center(child: Text('REDEEM', style: TextStyle(color: Colors.white, fontSize: 18.0),)),
+                    child: Center(
+                        child: Text(
+                      'REDEEM',
+                      style: TextStyle(color: Colors.white, fontSize: 18.0),
+                    )),
                   ),
                 ),
               ),
