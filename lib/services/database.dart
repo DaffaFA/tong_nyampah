@@ -4,6 +4,17 @@ class DatabaseService {
   final String uid;
   Firestore _firestore = Firestore.instance;
 
+  Future<void> setStatusRedeem(String docId, String status) async {
+    await _firestore
+        .collection('gifts_redeem')
+        .document(docId)
+        .updateData({"status": status});
+  }
+
+  Future<void> cancelRedeem(String docId) async {
+    await _firestore.collection('gifts_redeem').document(docId).delete();
+  }
+
   Future<void> createNewReport(
       {String image, String type, String title, String description}) async {
     try {
@@ -27,8 +38,8 @@ class DatabaseService {
   Future createReportClaim({String docId, String uid}) {
     return _firestore.collection('gifts_redeem').document().setData({
       "gifts_uid": docId,
-      "user_uid": uid,
       "status": 'waiting',
+      "user_uid": uid,
     });
   }
 
@@ -53,6 +64,17 @@ class DatabaseService {
 
   Stream<DocumentSnapshot> getReportByDocId(docId) {
     return _firestore.collection('reports').document(docId).snapshots();
+  }
+
+  Stream<QuerySnapshot> getAllWaitingGiftList(uid) {
+    return _firestore
+        .collection('gifts_redeem')
+        .where('user_uid', isEqualTo: uid)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getAllWaitingGift() {
+    return _firestore.collection('gifts_redeem').snapshots();
   }
 
   Stream<QuerySnapshot> getAllGift() {
@@ -86,6 +108,10 @@ class DatabaseService {
         "point": pointBefore + point,
       });
     }
+  }
+
+  Future<DocumentSnapshot> getGiftByDocId(docId) {
+    return _firestore.collection('gifts').document(docId).get();
   }
 
   Stream<QuerySnapshot> getAllReport() {

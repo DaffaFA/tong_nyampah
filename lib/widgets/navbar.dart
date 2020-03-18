@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tongnyampah/app.dart';
 
 class Navbar extends StatelessWidget {
-  @required final String condition;
+  @required
+  final String condition;
 
   Navbar({this.condition});
 
@@ -28,12 +29,21 @@ class Navbar extends StatelessWidget {
           Builder(
             builder: (context) => GestureDetector(
               child: Icon(
-                condition == null ? Icons.notifications
-                    : condition == 'search' ? Icons.search : condition == 'shop' ? Icons.shopping_cart : Icons.notifications ,
+                condition == null
+                    ? Icons.notifications
+                    : condition == 'search'
+                        ? Icons.search
+                        : condition == 'shop'
+                            ? Icons.shopping_cart
+                            : Icons.notifications,
                 size: 35.0,
                 color: Color(0xFF070707),
               ),
-              onTap: () => condition == null ? Navigator.pushNamed(context, NotificationRoute) : Naviga,
+              onTap: () => condition == null
+                  ? Navigator.pushNamed(context, NotificationRoute)
+                  : condition == 'shop'
+                      ? Navigator.pushNamed(context, '/gift/waiting')
+                      : null,
             ),
           )
         ],

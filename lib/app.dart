@@ -9,6 +9,7 @@ import 'package:tongnyampah/screens/authentication/sign_in_screen.dart';
 import 'package:tongnyampah/screens/blog_show.dart';
 import 'package:tongnyampah/screens/edit_profile.dart';
 import 'package:tongnyampah/screens/gift_description.dart';
+import 'package:tongnyampah/screens/gift_waiting.dart';
 import 'package:tongnyampah/screens/home/home.dart';
 import 'package:tongnyampah/screens/notification_list.dart';
 import 'package:tongnyampah/screens/report_screen.dart';
@@ -61,6 +62,7 @@ const FullScreenImageRoute = '/report/show/image';
 const GiftAddRoute = '/gift/add';
 const BlogAddRoute = '/blog/add';
 const BlogShowRoute = '/blog/show';
+const GiftWaitingRoute = '/gift/waiting';
 
 RouteFactory _routes() {
   return (settings) {
@@ -106,6 +108,7 @@ RouteFactory _routes() {
         break;
       case GiftDescriptionRoute:
         screen = GiftDescription(
+          userPoint: arguments["upoint"],
           image: arguments["image"],
           description: arguments["description"],
           title: arguments["title"],
@@ -129,6 +132,9 @@ RouteFactory _routes() {
           description: arguments["description"],
           timestamp: arguments["timestamp"],
         );
+        break;
+      case GiftWaitingRoute:
+        screen = GiftWaiting();
         break;
       default:
         return null;

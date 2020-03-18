@@ -8,17 +8,128 @@ class GiftDescription extends StatelessWidget {
   final String title;
   final int point;
   final String description;
+  final int userPoint;
   final String documentId;
 
-  GiftDescription(
-      {this.image, this.description, this.title, this.point, this.documentId});
+  GiftDescription({
+    this.image,
+    this.description,
+    this.title,
+    this.point,
+    this.documentId,
+    this.userPoint,
+  });
 
-  void redeemGift(context, giftId, userUid) {
+  Future redeemGift(context, giftId, userUid) {
     DatabaseService().createReportClaim(
       docId: giftId,
       uid: userUid,
     );
-    Navigator.pop(context);
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Success',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                    fontSize: 20.0,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    'Your gift now in the waiting list',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: RaisedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    color: Colors.white,
+                    child: Text('Close'),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future showInDialog(context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Insufficient Point',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                    fontSize: 20.0,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    'Not enough point to redeem this item',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: RaisedButton(
+                    onPressed: () => Navigator.pop(context),
+                    color: Colors.white,
+                    child: Text('Close'),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -100,14 +211,17 @@ class GiftDescription extends StatelessWidget {
                 color: Colors.black,
                 margin: EdgeInsets.symmetric(horizontal: 38.0),
                 child: InkWell(
-                  onTap: () => redeemGift(context, documentId, _user.uid),
+                  onTap: () async => userPoint < point
+                      ? await showInDialog(context)
+                      : redeemGift(context, documentId, _user.uid),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Center(
-                        child: Text(
-                      'REDEEM',
-                      style: TextStyle(color: Colors.white, fontSize: 18.0),
-                    )),
+                      child: Text(
+                        'REDEEM',
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                      ),
+                    ),
                   ),
                 ),
               ),

@@ -1,15 +1,36 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tongnyampah/models/Slider.dart';
+import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/gift_card.dart';
 import 'package:tongnyampah/widgets/item_container.dart';
 import 'package:tongnyampah/widgets/navbar.dart';
 
-class ShopMenu extends StatelessWidget {
+class ShopMenu extends StatefulWidget {
+  @override
+  _ShopMenuState createState() => _ShopMenuState();
+}
+
+class _ShopMenuState extends State<ShopMenu> {
+  int point = 0;
+
+  void getUserData(user) {
+    user.data.then((value) {
+      setState(() {
+        point = value["point"];
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<User>(context);
+
+    getUserData(_user);
+
     return SingleChildScrollView(
       child: SafeArea(
         child: Column(
@@ -109,6 +130,7 @@ class ShopMenu extends StatelessWidget {
                                 onTap: () => Navigator.pushNamed(
                                     context, '/gift/description',
                                     arguments: {
+                                      "upoint": point,
                                       "image": gift.data["image"],
                                       "title": gift.data["title"],
                                       "point": gift.data["point"],

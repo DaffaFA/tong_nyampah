@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/screens/admin/blog_list.dart';
 import 'package:tongnyampah/screens/admin/overall.dart';
+import 'package:tongnyampah/screens/admin/redeem_list.dart';
 import 'package:tongnyampah/screens/admin/report_list.dart';
 import 'package:tongnyampah/screens/loading_screen.dart';
 import 'package:tongnyampah/services/auth.dart';
@@ -47,6 +48,7 @@ class _DashboardState extends State<Dashboard> {
     Overall(),
     ReportList(),
     BlogList(),
+    RedeemList(),
   ];
 
   Future _openCamera(BuildContext context, type, page) async {
@@ -204,6 +206,11 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Icon(
                   Icons.book,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                Icon(
+                  Icons.av_timer,
                   size: 30,
                   color: Colors.white,
                 ),
