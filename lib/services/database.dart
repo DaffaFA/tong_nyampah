@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseService {
   final String uid;
   Firestore _firestore = Firestore.instance;
 
   Future<void> setStatusRedeem(String docId, String status) async {
-    await _firestore
-        .collection('gifts_redeem')
-        .document(docId)
-        .updateData({"status": status});
+    final uuid = Uuid().v4();
+
+    await _firestore.collection('gifts_redeem').document(docId).updateData({
+      "status": status,
+      "code": uuid,
+    });
   }
 
   Future<void> cancelRedeem(String docId) async {
@@ -40,6 +43,7 @@ class DatabaseService {
       "gifts_uid": docId,
       "status": 'waiting',
       "user_uid": uid,
+      "code": null,
     });
   }
 
@@ -112,6 +116,10 @@ class DatabaseService {
 
   Future<DocumentSnapshot> getGiftByDocId(docId) {
     return _firestore.collection('gifts').document(docId).get();
+  }
+
+  Future<DocumentSnapshot> getRedeemByDocId(docId) {
+    return _firestore.collection('gifts_redeem').document(docId).get();
   }
 
   Stream<QuerySnapshot> getAllReport() {

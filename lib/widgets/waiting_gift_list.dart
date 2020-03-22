@@ -5,9 +5,10 @@ class WaitingGiftList extends StatefulWidget {
   final Function onTap;
   final String status;
   final String giftUid;
+  final bool isAdmin;
   final String userUid;
 
-  WaitingGiftList({this.onTap, this.giftUid, this.status, this.userUid});
+  WaitingGiftList({this.onTap, this.giftUid, this.status, this.userUid, this.isAdmin});
 
   @override
   _WaitingGiftListState createState() => _WaitingGiftListState();
@@ -19,6 +20,7 @@ class _WaitingGiftListState extends State<WaitingGiftList> {
   String status;
   String description;
   int point;
+  String name;
 
   Future<void> getAllData() async {
     DatabaseService().getGiftByDocId(widget.giftUid).then((value) {
@@ -30,10 +32,21 @@ class _WaitingGiftListState extends State<WaitingGiftList> {
       });
     });
   }
+  
+  Future<void> getUser() async {
+    DatabaseService(uid: widget.userUid).getProfileData().then((value) {
+      setState(() {
+        name = value.data["name"].split(' ')[0];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     getAllData();
+    if ( widget.isAdmin == true ) {
+      getUser();
+    }
     return InkWell(
       onTap: widget.onTap,
       child: Container(
@@ -53,7 +66,7 @@ class _WaitingGiftListState extends State<WaitingGiftList> {
                     padding: EdgeInsets.only(bottom: 5.0),
                     child: Text(
                       // '${title.substring(0, 20)}',
-                      'Claim for $gift',
+                      widget.isAdmin == false || widget.isAdmin == null ? 'Claim for $gift' : '$name claim for $gift' ,
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,

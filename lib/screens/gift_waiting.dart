@@ -1,11 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/waiting_gift_list.dart';
 
-class GiftWaiting extends StatelessWidget {
+class GiftWaiting extends StatefulWidget {
+  @override
+  _GiftWaitingState createState() => _GiftWaitingState();
+}
+
+class _GiftWaitingState extends State<GiftWaiting> {
+  String qrCode;
+
+  Future showQrDialog(context, docId) async {
+    await DatabaseService().getRedeemByDocId(docId).then((onValue) {
+      qrCode = onValue.data["code"];
+    });
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                QrImage(
+                    data: qrCode,
+                    size: MediaQuery.of(context).size.width * 0.8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future showCancelDialog(context, docId) {
     return showDialog(
       context: context,

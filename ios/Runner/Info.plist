@@ -12,6 +12,12 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>tongnyampah</string>
+	<key>NSCameraUsageDescription</key>
+    <string>Camera permission is required.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Gallery permission is required.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone permission is required.</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
