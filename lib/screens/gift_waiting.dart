@@ -12,13 +12,8 @@ class GiftWaiting extends StatefulWidget {
 }
 
 class _GiftWaitingState extends State<GiftWaiting> {
-  String qrCode;
 
   Future showQrDialog(context, docId) async {
-    await DatabaseService().getRedeemByDocId(docId).then((onValue) {
-      qrCode = onValue.data["code"];
-    });
-
     return showDialog(
       context: context,
       builder: (context) {
@@ -37,7 +32,7 @@ class _GiftWaitingState extends State<GiftWaiting> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 QrImage(
-                    data: qrCode,
+                    data: docId,
                     size: MediaQuery.of(context).size.width * 0.8),
               ],
             ),
@@ -142,8 +137,16 @@ class _GiftWaitingState extends State<GiftWaiting> {
                         return Column(
                           children: snapshot.data.documents
                               .map((val) => WaitingGiftList(
-                                    onTap: () async => await showCancelDialog(
-                                        context, val.documentID),
+                                    onTap: () async {
+                                      if (val.data["status"] == 'waiting') {
+                                      await showCancelDialog(
+                                        context,
+                                        val.documentID,
+                                      );
+                                      } else if (val.data["status"] == 'confirmed' ) {
+                                        await showQrDialog(context, val.data["code"]);
+                                      }
+                                    },
                                     giftUid: val.data["gifts_uid"],
                                     userUid: _user.uid,
                                     status: val.data["status"],

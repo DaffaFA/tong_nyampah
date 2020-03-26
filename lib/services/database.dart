@@ -14,6 +14,25 @@ class DatabaseService {
     });
   }
 
+  Future<void> decreasePoint(String uid, String docId) async {
+    print(docId);
+    DocumentSnapshot _gift =
+        await _firestore.collection('gifts').document(docId).get();
+    DocumentSnapshot _user =
+        await _firestore.collection('profiles').document(uid).get();
+
+    await _firestore.collection('profiles').document(uid).updateData({
+      "point": _user.data["point"] - _gift.data["point"],
+    });
+
+    await _firestore.collection('point_history').document().setData({
+      "user_uid": uid,
+      "point_after": _user.data["point"] - _gift.data["point"],
+      "point_before": _user.data["point"],
+      "created_at": DateTime.now()
+    });
+  }
+
   Future<void> cancelRedeem(String docId) async {
     await _firestore.collection('gifts_redeem').document(docId).delete();
   }
