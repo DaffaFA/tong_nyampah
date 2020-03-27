@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tongnyampah/models/Slider.dart';
 import 'package:tongnyampah/models/User.dart';
 import 'package:tongnyampah/services/database.dart';
 import 'package:tongnyampah/widgets/gift_card.dart';
@@ -42,77 +41,93 @@ class _ShopMenuState extends State<ShopMenu> {
             ),
             Container(
               margin: EdgeInsets.only(top: 20.0),
-              child: CarouselSlider(
-                height: MediaQuery.of(context).size.height * 0.28,
-                enableInfiniteScroll: false,
-                autoPlay: false,
-                items: SliderItem.fetchAllSliderItem().map((item) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Stack(
-                        children: <Widget>[
-                          Container(
-                            height: MediaQuery.of(context).size.height,
-                            margin: EdgeInsets.symmetric(horizontal: 7.0),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(6.0)),
-                              color: Colors.white54,
-                              image: DecorationImage(
-                                  image: NetworkImage(item.image),
-                                  fit: BoxFit.cover,
-                                  repeat: ImageRepeat.noRepeat),
-                            ),
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                constraints:
-                                    BoxConstraints.expand(height: 65.0),
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 14.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        item.name,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.white,
-                                          shadows: <Shadow>[
-                                            Shadow(
-                                                color: Colors.black,
-                                                offset: Offset(0.0, 0.8),
-                                                blurRadius: 16.0),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 2.0),
-                                        child: Text(
-                                          item.description,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.white,
+              child: StreamBuilder<QuerySnapshot>(
+                stream: DatabaseService().getAllGift().take(3),
+                builder: (context, snapshot) => CarouselSlider(
+                  height: MediaQuery.of(context).size.height * 0.28,
+                  enableInfiniteScroll: false,
+                  autoPlay: false,
+                  items: snapshot.data.documents.map((item) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return InkWell(
+                          onTap: () => Navigator.pushNamed(
+                              context, '/gift/description',
+                              arguments: {
+                                "upoint": point,
+                                "image": item.data["image"],
+                                "title": item.data["title"],
+                                "point": item.data["point"],
+                                "description": item.data["description"],
+                                "documentId": item.documentID,
+                              }),
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                height: MediaQuery.of(context).size.height,
+                                margin: EdgeInsets.symmetric(horizontal: 7.0),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6.0)),
+                                  color: Colors.white54,
+                                  image: DecorationImage(
+                                      image: NetworkImage(item.data["image"]),
+                                      fit: BoxFit.cover,
+                                      repeat: ImageRepeat.noRepeat),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    constraints:
+                                        BoxConstraints.expand(height: 65.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 14.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            item.data["title"],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.white,
+                                              shadows: <Shadow>[
+                                                Shadow(
+                                                    color: Colors.black,
+                                                    offset: Offset(0.0, 0.8),
+                                                    blurRadius: 16.0),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
+                                          Container(
+                                            margin: EdgeInsets.only(top: 2.0),
+                                            child: Text(
+                                              item.data["description"],
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      );
-                    },
-                  );
-                }).toList(),
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             Container(

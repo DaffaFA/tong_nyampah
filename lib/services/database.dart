@@ -85,6 +85,13 @@ class DatabaseService {
     });
   }
 
+  Future editProfile({String name, String classroom}) async {
+    return await _firestore.collection('profiles').document(uid).updateData({
+      "name": name,
+      "classroom": classroom,
+    });
+  }
+
   Stream<DocumentSnapshot> getReportByDocId(docId) {
     return _firestore.collection('reports').document(docId).snapshots();
   }

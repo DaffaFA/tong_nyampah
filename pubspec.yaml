@@ -34,7 +34,7 @@ dependencies:
   flutter_spinkit: ^4.1.2
   uuid: ^2.0.4
   barcode_scan: ^2.0.1
-  dependencies:
+  image: ^2.1.4
   qr_flutter:
     git:
       url: git://github.com/lukef/qr.flutter.git
